@@ -2,7 +2,7 @@ repo_link = (name) ->
   """<a href="http://github.com/#{name}" target="_blank">#{name}</a>"""
 
 user_link = (username) ->
-  """<a href="http://github.com/user/#{username}" target="_blank">#{username}</a>"""
+  """<a href="http://github.com/#{username}" target="_blank">#{username}</a>"""
 
 strip_hash = (link) ->
   link.replace(/\#.*$/, '')

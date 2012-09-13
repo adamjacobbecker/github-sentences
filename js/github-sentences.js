@@ -7,7 +7,7 @@
   };
 
   user_link = function(username) {
-    return "<a href=\"http://github.com/user/" + username + "\" target=\"_blank\">" + username + "</a>";
+    return "<a href=\"http://github.com/" + username + "\" target=\"_blank\">" + username + "</a>";
   };
 
   strip_hash = function(link) {
