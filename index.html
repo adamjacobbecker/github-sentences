@@ -1,0 +1,32 @@
+<html>
+<head>
+  <title>Github-Sentences</title>
+  <style type="text/css">
+  .example .json {
+    display: none;
+  }
+
+  .example .toggle-json {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  </style>
+</head>
+<body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="js/github-sentences.js"></script>
+<script src="example-responses.js"></script>
+<script>
+  $(exampleResponses).each(function(key, response){
+    $("body").append("<div class='example'><div class='parsed'>"+githubSentences.convert(response)+
+                     "</div><a class='toggle-json'>Toggle Source</a><div class='json'><pre>"+JSON.stringify(response, 0, 2)+"</pre></div></div><hr />");
+  });
+
+  $(".toggle-json").on("click", function(){
+    $(this).parent().find(".json").toggle();
+  })
+</script>
+</body>
+</html>
