@@ -23,7 +23,7 @@
       name: "Commit Comment",
       render: function(event) {
         return {
-          sentence: " " + (user_link(event.actor.login)) + " commented on a commit in\n" + (link_to(strip_hash(event.payload.comment.html_url), event.repo.name)) + " "
+          sentence: " " + (user_link(event.actor.login)) + " commented on " + (link_to(event.payload.comment.html_url, 'a commit')) + " in\n" + (repo_link(event.repo.name)) + " "
         };
       }
     },
@@ -36,7 +36,7 @@
           };
         } else {
           return {
-            sentence: " " + (user_link(event.actor.login)) + " created " + event.payload.ref_type + " \"" + event.payload.ref + "\" on " + (repo_link(event.repo.name)) + " "
+            sentence: " " + (user_link(event.actor.login)) + " created " + event.payload.ref_type + " \"" + event.payload.ref + "\" in " + (repo_link(event.repo.name)) + " "
           };
         }
       }
@@ -45,7 +45,7 @@
       name: "Branch/Tag Deleted",
       render: function(event) {
         return {
-          sentence: " " + (user_link(event.actor.login)) + " deleted " + event.payload.ref_type + " \"" + event.payload.ref + "\" on " + (repo_link(event.repo.name)) + " "
+          sentence: " " + (user_link(event.actor.login)) + " deleted " + event.payload.ref_type + " \"" + event.payload.ref + "\" in " + (repo_link(event.repo.name)) + " "
         };
       }
     },
@@ -75,22 +75,56 @@
       name: "Gist Created/Updated"
     },
     "GollumEvent": {
-      name: "Wiki Updated"
+      name: "Wiki Updated",
+      render: function(event) {
+        return {
+          sentence: " " + (user_link(event.actor.login)) + " " + event.payload.pages.action + " " + (link_to(event.payload.pages.html_url, event.payload.pages.title)) + "\nin the " + (repo_link(event.repo.name)) + " wiki"
+        };
+      }
     },
     "IssueCommentEvent": {
-      name: "Issue Comment"
+      name: "Issue Comment",
+      render: function(event) {
+        var actionText;
+        actionText = (function() {
+          switch (event.payload.action) {
+            case "created":
+              return "commented on";
+            default:
+              return event.payload.action;
+          }
+        })();
+        return {
+          sentence: "" + (user_link(event.actor.login)) + " " + actionText + " " + (link_to(event.payload.issue.html_url, 'Issue #' + event.payload.issue.number)) + " in\n" + (repo_link(event.repo.name))
+        };
+      }
     },
     "IssuesEvent": {
-      name: "Issue Opened/CLosed"
+      name: "Issue Opened/CLosed",
+      render: function(event) {
+        return {
+          sentence: "" + (user_link(event.actor.login)) + " " + event.payload.action + " " + (link_to(event.payload.issue.html_url, 'Issue #' + event.payload.issue.number)) + " in\n" + (repo_link(event.repo.name))
+        };
+      }
     },
     "MemberEvent": {
       name: "Collaborator Added"
     },
     "PublicEvent": {
-      name: "Repo Open-Sourced"
+      name: "Repo Open-Sourced",
+      render: function(event) {
+        return {
+          sentence: "" + (user_link(event.actor.login)) + " open-sourced " + (repo_link(event.repo.name))
+        };
+      }
     },
     "PullRequestEvent": {
-      name: "Pull Request Opened/CLosed"
+      name: "Pull Request Opened/CLosed",
+      render: function(event) {
+        return {
+          sentence: " " + (user_link(event.actor.login)) + " " + event.payload.action + "\n            " + (link_to(event.payload.pull_request.html_url, 'Pull Request #' + event.payload.pull_request.number)) + " in\n" + (repo_link(event.repo.name))
+        };
+      }
     },
     "PullRequestReviewCommentEvent": {
       name: "Pull Request Comment"
@@ -126,7 +160,7 @@
           sentence: event.type
         };
       }
-      html = "<div class=\"github-item\">\n  <div class=\"sentence\">" + converted.sentence + "</div>\n  <div class=\"timestamp\">" + event.created_at + "</div>";
+      html = "<div class=\"github-sentence-item event-" + (event.type.toLowerCase()) + "\">\n  <div class=\"avatar\"><img src=\"" + event.actor.avatar_url + "\" /></div>\n  <div class=\"sentence\">" + converted.sentence + "</div>\n  <div class=\"timestamp\">" + event.created_at + "</div>";
       if (converted.details != null) {
         html += " <div class=\"details\">" + converted.details + "</div> ";
       }

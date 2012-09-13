@@ -14,8 +14,8 @@ github_event_types =
   "CommitCommentEvent":
     name: "Commit Comment"
     render: (event) ->
-      sentence: """ #{user_link(event.actor.login)} commented on a commit in
-                    #{link_to(strip_hash(event.payload.comment.html_url), event.repo.name)} """
+      sentence: """ #{user_link(event.actor.login)} commented on #{link_to(event.payload.comment.html_url, 'a commit')} in
+                    #{repo_link(event.repo.name)} """
 
   "CreateEvent":
     name: "Repo or Branch Created"
@@ -23,12 +23,12 @@ github_event_types =
       if event.payload.ref_type is "repository"
         sentence: """ #{user_link(event.actor.login)} created #{event.payload.ref_type} #{repo_link(event.repo.name)} """
       else
-        sentence: """ #{user_link(event.actor.login)} created #{event.payload.ref_type} "#{event.payload.ref}" on #{repo_link(event.repo.name)} """
+        sentence: """ #{user_link(event.actor.login)} created #{event.payload.ref_type} "#{event.payload.ref}" in #{repo_link(event.repo.name)} """
 
   "DeleteEvent":
     name: "Branch/Tag Deleted"
     render: (event) ->
-      sentence: """ #{user_link(event.actor.login)} deleted #{event.payload.ref_type} "#{event.payload.ref}" on #{repo_link(event.repo.name)} """
+      sentence: """ #{user_link(event.actor.login)} deleted #{event.payload.ref_type} "#{event.payload.ref}" in #{repo_link(event.repo.name)} """
 
   "DownloadEvent":
     name: "Download"
@@ -49,16 +49,48 @@ github_event_types =
     name: "Gist Created/Updated"
   "GollumEvent":
     name: "Wiki Updated"
+    render: (event) ->
+      sentence: """ #{user_link(event.actor.login)} #{event.payload.pages.action} #{link_to(event.payload.pages.html_url, event.payload.pages.title)}
+        in the #{repo_link(event.repo.name)} wiki
+      """
+
   "IssueCommentEvent":
     name: "Issue Comment"
+    render: (event) ->
+      actionText = switch event.payload.action
+        when "created" then "commented on"
+        else event.payload.action
+
+      sentence: """
+        #{user_link(event.actor.login)} #{actionText} #{link_to(event.payload.issue.html_url, 'Issue #' + event.payload.issue.number)} in
+        #{repo_link(event.repo.name)}
+      """
+
   "IssuesEvent":
     name: "Issue Opened/CLosed"
+    render: (event) ->
+      sentence: """
+          #{user_link(event.actor.login)} #{event.payload.action} #{link_to(event.payload.issue.html_url, 'Issue #' + event.payload.issue.number)} in
+          #{repo_link(event.repo.name)}
+        """
   "MemberEvent":
     name: "Collaborator Added"
   "PublicEvent":
     name: "Repo Open-Sourced"
+    render: (event) ->
+      sentence: """
+          #{user_link(event.actor.login)} open-sourced #{repo_link(event.repo.name)}
+      """
+
   "PullRequestEvent":
     name: "Pull Request Opened/CLosed"
+    render: (event) ->
+      # todo: make this link to the correct commit
+      sentence: """ #{user_link(event.actor.login)} #{event.payload.action}
+                    #{link_to(event.payload.pull_request.html_url, 'Pull Request #' + event.payload.pull_request.number)} in
+        #{repo_link(event.repo.name)}
+      """
+
   "PullRequestReviewCommentEvent":
     name:  "Pull Request Comment"
   "PushEvent":
@@ -84,7 +116,8 @@ window.githubSentences =
         sentence: event.type
 
     html = """
-      <div class="github-item">
+      <div class="github-sentence-item event-#{event.type.toLowerCase()}">
+        <div class="avatar"><img src="#{event.actor.avatar_url}" /></div>
         <div class="sentence">#{converted.sentence}</div>
         <div class="timestamp">#{event.created_at}</div>
     """
