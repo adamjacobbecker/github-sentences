@@ -1,0 +1,13 @@
+.example .json {
+  display: none;
+}
+.example .toggle-json {
+  color: #aaa;
+  font-size: 12px;
+  padding-top: 5px;
+  display: inline-block;
+  cursor: pointer;
+}
+.example .toggle-json:hover {
+  text-decoration: underline;
+}

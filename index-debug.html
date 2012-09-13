@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>Github-Sentences</title>
+  <link rel="stylesheet" href="css/index-debug.css" />
   <link rel="stylesheet" href="css/github-sentences.css" />
 </head>
 <body>
@@ -11,8 +12,13 @@
 <script src="example-responses.js"></script>
 <script>
   $(exampleResponses).each(function(key, response){
-    $("body").append(githubSentences.convert(response));
+    $("body").append("<div class='example'> <div class='parsed'>"+githubSentences.convert(response)+
+                     "</div><a class='toggle-json'>Toggle Source</a><div class='json'><pre>"+JSON.stringify(response, 0, 2)+"</pre></div></div><hr />");
   });
+
+  $(".toggle-json").on("click", function(){
+    $(this).parent().find(".json").toggle();
+  })
 
   $(".timestamp").relatizeDate();
 </script>
