@@ -21,7 +21,8 @@
 </head>
 <body>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/jquery.relatize_date.js"></script>
 <script src="js/github-sentences.js"></script>
 <script src="example-responses.js"></script>
 <script>
@@ -33,6 +34,8 @@
   $(".toggle-json").on("click", function(){
     $(this).parent().find(".json").toggle();
   })
+
+  $(".timestamp").relatizeDate();
 </script>
 </body>
 </html>
