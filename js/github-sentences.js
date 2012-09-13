@@ -151,6 +151,7 @@
   };
 
   window.githubSentences = {
+    eventTypes: github_event_types,
     convert: function(event) {
       var converted, html;
       if (github_event_types[event.type]["render"] != null) {

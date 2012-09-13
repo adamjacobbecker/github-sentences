@@ -108,6 +108,7 @@ github_event_types =
 
 
 window.githubSentences =
+  eventTypes: github_event_types
   convert: (event) ->
     if github_event_types[event.type]["render"]?
       converted = github_event_types[event.type]["render"](event)
