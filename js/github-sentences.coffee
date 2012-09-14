@@ -5,7 +5,6 @@ user_link = (username) ->
   """<a href="http://github.com/#{username}" target="_blank">#{username}</a>"""
 
 commit_link = (commit, repo_name) ->
-  return if !commit? or !repo_name?
   """<a href="http://github.com/#{repo_name}/commit/#{commit.sha}" target="_blank">#{commit.message}</a>"""
 
 strip_hash = (link) ->
@@ -101,7 +100,8 @@ github_event_types =
     name: "Push"
     render: (event) ->
       commit = if (event.payload.commits instanceof Array) then event.payload.commits[0] else event.payload.commits
-      sentence: """ #{user_link(event.actor.login)} pushed "#{commit_link(commit, event.repo.name)}" to #{repo_link(event.repo.name)} """
+      sentence: """ #{user_link(event.actor.login)} pushed #{(if commit? then '"' + commit_link(commit, event.repo.name) + '"' else '')}
+                    to #{repo_link(event.repo.name)} """
 
   "TeamAddEvent":
     name: "Team Added"

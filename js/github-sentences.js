@@ -11,9 +11,6 @@
   };
 
   commit_link = function(commit, repo_name) {
-    if (!(commit != null) || !(repo_name != null)) {
-      return;
-    }
     return "<a href=\"http://github.com/" + repo_name + "/commit/" + commit.sha + "\" target=\"_blank\">" + commit.message + "</a>";
   };
 
@@ -142,7 +139,7 @@
         var commit;
         commit = event.payload.commits instanceof Array ? event.payload.commits[0] : event.payload.commits;
         return {
-          sentence: " " + (user_link(event.actor.login)) + " pushed \"" + (commit_link(commit, event.repo.name)) + "\" to " + (repo_link(event.repo.name)) + " "
+          sentence: " " + (user_link(event.actor.login)) + " pushed " + (commit != null ? '"' + commit_link(commit, event.repo.name) + '"' : '') + "\nto " + (repo_link(event.repo.name)) + " "
         };
       }
     },
