@@ -11,6 +11,9 @@
   };
 
   commit_link = function(commit, repo_name) {
+    if (!(commit != null) || !(repo_name != null)) {
+      return;
+    }
     return "<a href=\"http://github.com/" + repo_name + "/commit/" + commit.sha + "\" target=\"_blank\">" + commit.message + "</a>";
   };
 

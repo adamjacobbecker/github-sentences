@@ -5,6 +5,7 @@ user_link = (username) ->
   """<a href="http://github.com/#{username}" target="_blank">#{username}</a>"""
 
 commit_link = (commit, repo_name) ->
+  return if !commit? or !repo_name?
   """<a href="http://github.com/#{repo_name}/commit/#{commit.sha}" target="_blank">#{commit.message}</a>"""
 
 strip_hash = (link) ->
