@@ -4,6 +4,9 @@ repo_link = (name) ->
 user_link = (username) ->
   """<a href="http://github.com/#{username}" target="_blank">#{username}</a>"""
 
+commit_link = (commit, repo_name) ->
+  """<a href="http://github.com/#{repo_name}/commit/#{commit.sha}" target="_blank">#{commit.message}</a>"""
+
 strip_hash = (link) ->
   link.replace(/\#.*$/, '')
 
@@ -96,8 +99,8 @@ github_event_types =
   "PushEvent":
     name: "Push"
     render: (event) ->
-      # todo: make this link to the correct commit
-      sentence: """ #{user_link(event.actor.login)} pushed to #{repo_link(event.repo.name)} """
+      commit = if (event.payload.commits instanceof Array) then event.payload.commits[0] else event.payload.commits
+      sentence: """ #{user_link(event.actor.login)} pushed "#{commit_link(commit, event.repo.name)}" to #{repo_link(event.repo.name)} """
 
   "TeamAddEvent":
     name: "Team Added"
