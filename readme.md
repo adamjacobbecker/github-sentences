@@ -1,8 +1,6 @@
 ## Github Sentences
 [Live Demo](http://ada.mbecker.cc/github-sentences)
 
-----
-
 ##### Makes this:
 
 ![adamjacobbecker opened Issue #4 in presidential-innovation-fellows/sowcomposer](http://i.imgur.com/ICiSe.png)
